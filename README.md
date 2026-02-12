@@ -2,13 +2,20 @@
   <img src="./banner.png" alt="Certificates & Docs Banner" width="100%" height="200" style="object-fit: cover; ">
 </p>
 
-# 🎓 Certificates & Docs Portal
+<h1 align="center"> 🎓 Certificates & Docs Portal</h1>
+<div align="center">
+
+  ![HTML5](https://img.shields.io/badge/HTML5-c084fc?style=for-the-badge&logo=html5&logoColor=white)
+  ![CSS3](https://img.shields.io/badge/CSS3-f472b6?style=for-the-badge&logo=css3&logoColor=white)
+  ![JavaScript](https://img.shields.io/badge/JavaScript-818cf8?style=for-the-badge&logo=javascript&logoColor=white)
+
+</div>
+
+---
+
+## 📖 Project Overview
 
 A premium, high-performance portfolio portal for showcasing professional certifications, awards, and educational achievements. This project transforms a flat directory of PDF documents into an interactive, searchable, and beautifully themed web experience.
-
-![GitHub last commit](https://img.shields.io/github/last-commit/ajaygangwar/Certificates-Docs?style=for-the-badge&color=818cf8)
-![Tech Stack](https://img.shields.io/badge/Tech_Stack-HTML5_|_CSS3_|_JS-c084fc?style=for-the-badge)
-![Total Documents](https://img.shields.io/badge/Total_Assets-73-f472b6?style=for-the-badge)
 
 ---
 
@@ -64,6 +71,14 @@ The project consists of a high-end interface managing 73 professional documents:
 | **Academic** | 5+ IIT Ropar competitions & University Documents |
 | **Hackathons** | Space Hackathons, Solve-A-Thons, and Buildfests |
 
+## 🌐 Live Demo
+
+The portal is deployed and can be accessed at:
+
+<p align="center">
+  [![Vercel Deployment](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://certificates-docs-portal.vercel.app/)
+</p>
+
 ---
 
 ## 🚀 Getting Started
@@ -73,3 +88,8 @@ The project consists of a high-end interface managing 73 professional documents:
 3. Use the search bar or category chips to explore the collection.
 
 ---
+
+<p align="center">
+  Developed with ❤️ by <b>Ajay Gangwar</b><br>
+  <i>If you find this project useful, please consider giving it a ⭐</i>
+</p>
