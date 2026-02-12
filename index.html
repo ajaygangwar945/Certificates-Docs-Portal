@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificates & Docs Portal</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23818cf8;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23c084fc;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='3' y='4' width='18' height='16' rx='2' fill='url(%23grad)' /%3E%3Cpath d='M7 8h10M7 12h10M7 16h5' stroke='white' stroke-width='1.5' stroke-linecap='round' /%3E%3Ccircle cx='17' cy='16' r='3' fill='%23f472b6' stroke='white' stroke-width='1' /%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Dark Theme (Default) */
+            --primary-color: #818cf8;
+            /* Indigo 400 */
+            --secondary-color: #c084fc;
+            /* Purple 400 */
+            --bg-color: #0f172a;
+            /* Slate 900 */
+            --text-color: #f1f5f9;
+            /* Slate 100 */
+            --text-muted: #cbd5e1;
+            /* Slate 300 - Higher contrast */
+            --card-bg: rgba(30, 41, 59, 0.6);
+            /* Slate 800 with transparency */
+            --card-border: rgba(148, 163, 184, 0.2);
+            --card-hover-bg: rgba(30, 41, 59, 0.8);
+            --glow-color: rgba(129, 140, 248, 0.4);
+            --search-bg: rgba(30, 41, 59, 0.8);
+            --search-text: #f1f5f9;
+            --header-gradient: linear-gradient(to right, #818cf8, #c084fc, #f472b6);
+        }
+
+        [data-theme="light"] {
+            --primary-color: #4f46e5;
+            --secondary-color: #9333ea;
+            --bg-color: #f1f5f9;
+            --text-color: #0f172a;
+            --text-muted: #334155;
+            --card-bg: #ffffff;
+            --card-border: #cbd5e1;
+            --card-hover-bg: #f8fafc;
+            --glow-color: rgba(79, 70, 229, 0.15);
+            --search-bg: #ffffff;
+            --search-text: #0f172a;
+            --header-gradient: linear-gradient(to right, #4f46e5, #9333ea);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: var(--bg-color);
+            transition: background-color 0.5s ease;
+        }
+
+        /* Noise Texture Overlay */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.05;
+            pointer-events: none;
+            filter: url(#noiseFilter);
+        }
+
+        .blobs-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: url('#goo');
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(60px);
+            opacity: var(--blob-opacity);
+            animation: float 20s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
+            border-radius: 50%;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Particle Canvas Removed */
+
+        .blob-1 {
+            top: -15%;
+            left: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: var(--primary-color);
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            bottom: -15%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: var(--secondary-color);
+            animation-delay: -4s;
+            animation-direction: alternate-reverse;
+        }
+
+        .blob-3 {
+            top: 20%;
+            right: 10%;
+            width: 45vw;
+            height: 45vw;
+            background: var(--blob-color-3);
+            animation-duration: 25s;
+            animation-delay: -8s;
+        }
+
+        .blob-4 {
+            bottom: 20%;
+            left: 10%;
+            width: 40vw;
+            height: 40vw;
+            background: var(--blob-color-4);
+            animation-duration: 30s;
+            animation-delay: -12s;
+            animation-direction: alternate-reverse;
+        }
+
+        .blob-5 {
+            top: 50%;
+            left: 50%;
+            width: 35vw;
+            height: 35vw;
+            background: var(--secondary-color);
+            opacity: calc(var(--blob-opacity) * 0.7);
+            animation-duration: 15s;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(30px, -50px) scale(1.1) rotate(10deg);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) scale(0.9) rotate(-5deg);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+        }
+
+
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 1s ease-out;
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg) scale(1.1);
+            background: var(--card-hover-bg);
+            box-shadow: 0 0 15px var(--glow-color);
+        }
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 15px;
+            vertical-align: middle;
+            filter: drop-shadow(0 0 8px var(--glow-color));
+            transition: transform 0.3s ease;
+        }
+
+        h1:hover .header-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: var(--header-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            min-width: 120px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Filter Chips */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .filter-chip {
+            padding: 0.6rem 1.2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+        }
+
+        .filter-chip:hover {
+            background: var(--card-hover-bg);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .filter-chip.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 15px var(--glow-color);
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3rem;
+            border-radius: 50px;
+            border: 1px solid var(--card-border);
+            background: var(--search-bg);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            color: var(--search-text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px var(--glow-color);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        /* Grid */
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            perspective: 1500px;
+            padding-bottom: 2rem;
+        }
+
+        /* Card */
+        .pdf-card {
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.75rem;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 220px;
+            height: 100%;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .pdf-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.2), 0 0 12px var(--glow-color);
+            background: var(--card-hover-bg);
+            transform: translateY(-2px);
+        }
+
+        .pdf-card.branded:hover {
+            border-color: var(--brand-color);
+            box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.2), 0 0 15px var(--brand-glow);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: #ef4444;
+            /* PDF Red */
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            color: var(--text-color);
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .tag {
+            background: var(--glow-color);
+            color: var(--primary-color);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        [data-theme="light"] .tag {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Brand Specific Styles */
+        .card-aws {
+            --brand-color: #ff9900;
+            --brand-glow: rgba(255, 153, 0, 0.4);
+        }
+
+        .card-google {
+            --brand-color: #4285f4;
+            --brand-glow: rgba(66, 133, 244, 0.4);
+        }
+
+        .card-microsoft {
+            --brand-color: #00a4ef;
+            --brand-glow: rgba(0, 164, 239, 0.4);
+        }
+
+        .card-iit {
+            --brand-color: #003366;
+            --brand-glow: rgba(0, 51, 102, 0.4);
+        }
+
+        .card-cisco {
+            --brand-color: #00bceb;
+            --brand-glow: rgba(0, 188, 235, 0.4);
+        }
+
+        .card-hackathon {
+            --brand-color: #f472b6;
+            --brand-glow: rgba(244, 114, 182, 0.4);
+        }
+
+        .card-coursera {
+            --brand-color: #0056d2;
+            --brand-glow: rgba(0, 86, 210, 0.4);
+        }
+
+        .pdf-card.branded {
+            border-color: var(--brand-glow);
+        }
+
+        .pdf-card.branded {
+            border-color: var(--brand-glow);
+        }
+
+        .pdf-card.branded .card-icon {
+            color: var(--brand-color);
+        }
+
+        .pdf-card.branded .tag {
+            background: var(--brand-glow);
+            color: var(--brand-color);
+        }
+
+        [data-theme="light"] .pdf-card.branded .tag {
+            background: var(--brand-color);
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            animation: fadeIn 1.5s ease-out;
+            margin-top: auto;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="noise"></div>
+    <div class="background"></div>
+
+    <!-- SVG Filters Removed -->
+
+    <div class="container">
+        <header>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme">
+                <i class="fas fa-moon"></i>
+            </button>
+            <h1>
+                <svg class="header-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#818cf8;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#c084fc;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="3" y="4" width="18" height="16" rx="2" fill="url(#headerGrad)" />
+                    <path d="M7 8h10M7 12h10M7 16h5" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                    <circle cx="17" cy="16" r="3" fill="#f472b6" stroke="white" stroke-width="1" />
+                </svg>Certificates & Docs Portal
+            </h1>
+            <p class="subtitle">A curated collection of my professional certifications, awards, and learning resources.
+            </p>
+
+            <div class="stats-bar" id="statsBar">
+                <!-- Stats will be injected here -->
+            </div>
+        </header>
+
+        <div class="filter-container" id="filterContainer">
+            <!-- Filter chips will be injected here -->
+        </div>
+
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input"
+                placeholder="Search for certificates, technologies, or topics...">
+        </div>
+
+        <div class="pdf-grid" id="pdfGrid">
+            <!-- Cards will be injected here via JS -->
+        </div>
+
+        <footer>
+            <p>Designed & Built by Ajay Gangwar &copy; 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        const html = document.documentElement;
+
+        // Check local storage or system preference
+        const savedTheme = localStorage.getItem('theme');
+        const systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+
+        if (savedTheme === 'light' || (!savedTheme && systemTheme === 'light')) {
+            html.setAttribute('data-theme', 'light');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            if (newTheme === 'light') {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        });
+
+        // List of all PDF files with metadata
+        const pdfDocuments = [
+            { file: "12322931 CDP.pdf", title: "CDP Certification", desc: "Career Development Program completion certificate.", tag: "Certificate" },
+            { file: "15 Days Generative AI.pdf", title: "15 Days Generative AI", desc: "Intensive 15-day workshop on Generative AI models and applications.", tag: "Course" },
+            { file: "AWS Community Day.pdf", title: "AWS Community Day", desc: "Participation certificate for AWS Community Day event.", tag: "AWS" },
+            { file: "AWS Community Javascript & ReactJS DevTown.pdf", title: "AWS: JS & ReactJS", desc: "DevTown workshop covering JavaScript and ReactJS with AWS integration.", tag: "AWS" },
+            { file: "AWS DevTown.pdf", title: "AWS DevTown", desc: "Cloud computing fundamentals workshop organized by DevTown.", tag: "AWS" },
+            { file: "AWS Fundamentals.pdf", title: "AWS Fundamentals", desc: "Core concepts of Amazon Web Services cloud infrastructure.", tag: "AWS" },
+            { file: "AWS Intro C++ & DSA DevTown .pdf", title: "AWS: C++ & DSA", desc: "Data Structures and Algorithms in C++ with AWS context.", tag: "AWS" },
+            { file: "AWS Javascript & ReactJs DevTown.pdf", title: "AWS: Full Stack", desc: "Full stack development using ReactJS deployed on AWS.", tag: "AWS" },
+            { file: "AWS Roadmap To DevOps.pdf", title: "AWS DevOps Roadmap", desc: "Comprehensive guide and certification for AWS DevOps path.", tag: "AWS" },
+            { file: "Advanced Microsoft Excel.pdf", title: "Advanced Excel", desc: "Mastery of advanced Microsoft Excel formulas and data analysis.", tag: "Skill" },
+            { file: "Advanced PowerPoint.pdf", title: "Advanced PowerPoint", desc: "Professional presentation design and advanced PowerPoint techniques.", tag: "Skill" },
+            { file: "BONAFIDE CERTIFICATE CDP.pdf", title: "Bonafide Certificate (CDP)", desc: "Official bonafide document for Career Development Program.", tag: "Document" },
+            { file: "Bharatiya Antariksh Hackathon 2025.pdf", title: "Bharatiya Antariksh Hackathon", desc: "Participation in the 2025 National Space Hackathon.", tag: "Hackathon" },
+            { file: "Build Generative AI Apps and Solutions with No-Code Tools.pdf", title: "No-Code Gen AI", desc: "Building AI solutions using no-code platforms and tools.", tag: "AI/ML" },
+            { file: "Build With India.pdf", title: "Build With India", desc: "Certificate from the 'Build With India' developer initiative.", tag: "Event" },
+            { file: "CISCO Introduction to Modern AI.pdf", title: "CISCO: Modern AI", desc: "Introduction to modern Artificial Intelligence concepts by Cisco.", tag: "AI/ML" },
+            { file: "CSE 310 Neo Colab.pdf", title: "CSE 310: Programming", desc: "Neo Colab course completion for CSE 310.", tag: "Neo Colab" },
+            { file: "CSE101 Neo Colab.pdf", title: "CSE 101: Computer Basics", desc: "Fundamental computer science course completion.", tag: "Neo Colab" },
+            { file: "CSE202 Neo Colab.pdf", title: "CSE 202: Object Oriented", desc: "Object Oriented Programming course completion.", tag: "Neo Colab" },
+            { file: "CSE205 Neo Colab.pdf", title: "CSE 205: Data Structures", desc: "Data Structures and Algorithms course completion.", tag: "Neo Colab" },
+            { file: "CSS, Bootstrap, JavaScript And PHP Stack Complete Course.pdf", title: "Full Stack Web Dev", desc: "Complete course on CSS, Bootstrap, JS, and PHP stack.", tag: "Web Dev" },
+            { file: "CT University.pdf", title: "CT University Doc", desc: "Official document/certificate from CT University.", tag: "University" },
+            { file: "Certificate of Appreciation DevTown.pdf", title: "Appreciation: DevTown", desc: "Certificate of Appreciation for contributions to DevTown.", tag: "Award" },
+            { file: "Certificate of Recognition Ajay Gangwar.pdf", title: "Recognition: Ajay Gangwar", desc: "Formal certificate of recognition for outstanding performance.", tag: "Award" },
+            { file: "Claude Solve-A-Thon.pdf", title: "Claude Solve-A-Thon", desc: "Participation in the Claude AI problem-solving marathon.", tag: "Hackathon" },
+            { file: "CodeQuery The Ultimate PL SQL & Data Science Bootcamp.pdf", title: "PL/SQL & Data Science", desc: "Bootcamp completion for Database and Data Science skills.", tag: "Data Science" },
+            { file: "ComSoc HackX 2025.pdf", title: "ComSoc HackX 2025", desc: "Certificate from the ComSoc HackX 2025 hackathon.", tag: "Hackathon" },
+            { file: "Complete Graphics Design Course for Beginner to Advanced.pdf", title: "Graphics Design Master", desc: "Complete guide to graphics design from beginner to advanced.", tag: "Design" },
+            { file: "Computational Theory Language Principle & Finite Automata Theory.pdf", title: "Automata Theory", desc: "Course on Computational Theory and Finite Automata.", tag: "CS Theory" },
+            { file: "Coursera Introduction to Hardware and Operating Systems.pdf", title: "Hardware & OS", desc: "Coursera certification on Hardware and Operating Systems.", tag: "Coursera" },
+            { file: "Coursera The Bits and Bytes of Computer Networking.pdf", title: "Computer Networking", desc: "Google/Coursera certification on Computer Networking basics.", tag: "Coursera" },
+            { file: "Cursa.pdf", title: "Cursa Platform", desc: "Certificate of completion from Cursa learning platform.", tag: "Course" },
+            { file: "Dev Create Buildfest 1.0 GDG CT North Campus.pdf", title: "GDG Buildfest 1.0", desc: "Developer Create Buildfest organised by GDG CT North Campus.", tag: "Google" },
+            { file: "Digital Systems From Logic Gates to Processors.pdf", title: "Digital Systems", desc: "From Logic Gates to Processors: Digital electronics course.", tag: "Engineering" },
+            { file: "Flutter UI Bootcamp Build Beautiful Apps using Flutter.pdf", title: "Flutter UI Bootcamp", desc: "Building beautiful cross-platform mobile apps with Flutter.", tag: "Mobile" },
+            { file: "Foundations of Web Development CSS, Bootstrap, JS, React.pdf", title: "Web Dev Foundations", desc: "Core foundations of modern web development.", tag: "Web Dev" },
+            { file: "FreeCodeCamp.pdf", title: "FreeCodeCamp Cert", desc: "Certification of completion from FreeCodeCamp.", tag: "Course" },
+            { file: "Fundamentals of Network Communication.pdf", title: "Network Fundamentals", desc: "Basics of network communication protocols and architecture.", tag: "Networking" },
+            { file: "Git for Beginners.pdf", title: "Git for Beginners", desc: "Version control mastery using Git and GitHub.", tag: "DevOps" },
+            { file: "Google Developer Club C++ & DSA DevTown.pdf", title: "GDSC: C++ & DSA", desc: "Google Developer Student Club workshop on C++ and DSA.", tag: "Google" },
+            { file: "Google Developer Club DevTown.pdf", title: "GDSC DevTown", desc: "General participation certificate from GDSC DevTown.", tag: "Google" },
+            { file: "Google Developer Club Javascript & ReactJs DevTown.pdf", title: "GDSC: JS & React", desc: "Frontend development workshop by Google Developer Student Club.", tag: "Google" },
+            { file: "HTML & CSS By Sara Academy Udemy.pdf", title: "HTML & CSS Mastery", desc: "Udemy course completion for HTML and CSS web styling.", tag: "Web Dev" },
+            { file: "HackTheBlock Hackathon.pdf", title: "HackTheBlock", desc: "Blockchain based hackathon participation certificate.", tag: "Hackathon" },
+            { file: "HackWithVertos 1.0 Hackathon 24 hr.pdf", title: "HackWithVertos 1.0", desc: "24-hour marathon hackathon 'HackWithVertos' certificate.", tag: "Hackathon" },
+            { file: "IIT ROPAR AI Fusion.pdf", title: "IIT Ropar: AI Fusion", desc: "AI Fusion workshop/event at IIT Ropar.", tag: "IIT Ropar" },
+            { file: "IIT ROPAR Catalyzing Concepts.pdf", title: "IIT Ropar: Concepts", desc: "'Catalyzing Concepts' event participation at IIT Ropar.", tag: "IIT Ropar" },
+            { file: "IIT ROPAR Circuit Chase.pdf", title: "IIT Ropar: Circuit Chase", desc: "Electronics circuit design competition at IIT Ropar.", tag: "IIT Ropar" },
+            { file: "IIT ROPAR CodeHunt.pdf", title: "IIT Ropar: CodeHunt", desc: "Competitive coding 'CodeHunt' challenge at IIT Ropar.", tag: "IIT Ropar" },
+            { file: "IIT ROPAR Maths Arena.pdf", title: "IIT Ropar: Maths Arena", desc: "Mathematics competition participation at IIT Ropar.", tag: "IIT Ropar" },
+            { file: "Integrity Pledge.pdf", title: "Integrity Pledge", desc: "Formal pledge of integrity and ethical conduct.", tag: "Document" },
+            { file: "Javascript For Beginners Complete Course.pdf", title: "JS for Beginners", desc: "Comprehensive course on JavaScript programming language.", tag: "Web Dev" },
+            { file: "Learn Blockchain and Crypto from Beginning.pdf", title: "Blockchain & Crypto", desc: "Introduction to Blockchain technology and Cryptocurrency.", tag: "Web3" },
+            { file: "Master Generative AI & Generative AI tools (ChatGPT & more).pdf", title: "Master Generative AI", desc: "Mastering tools like ChatGPT and other GenAI models.", tag: "AI/ML" },
+            { file: "Microsoft Excel Fundamentals A Beginners Guide.pdf", title: "Excel Fundamentals", desc: "Beginner's guide to spreadsheets and Microsoft Excel.", tag: "Skill" },
+            { file: "Microsoft Excel.pdf", title: "Microsoft Excel", desc: "General certification in Microsoft Excel proficiency.", tag: "Skill" },
+            { file: "Nuxt.pdf", title: "Nuxt.js", desc: "Vue.js framework 'Nuxt' development certification.", tag: "Web Dev" },
+            { file: "Packet Switching Networks and Algorithms.pdf", title: "Packet Switching", desc: "Advanced networking concepts: Packet Switching algorithms.", tag: "Networking" },
+            { file: "Paranox 2.O Hackathon Main.pdf", title: "Paranox 2.0 (Main)", desc: "Main event certificate for Paranox 2.0 Hackathon.", tag: "Hackathon" },
+            { file: "Paranox 2.O Hackathon.pdf", title: "Paranox 2.0", desc: "Participation certificate for Paranox 2.0 Hackathon.", tag: "Hackathon" },
+            { file: "Peer-to-Peer Protocols and LAN.pdf", title: "P2P & LAN", desc: "Study of Peer-to-Peer protocols and Local Area Networks.", tag: "Networking" },
+            { file: "Product Manager.pdf", title: "Product Management", desc: "Certification in Product Management fundamentals.", tag: "Business" },
+            { file: "Python for Data Science NPTEL.pdf", title: "Python for Data Science", desc: "NPTEL certification for Python in Data Science context.", tag: "Data Science" },
+            { file: "ReactJs - The Complete ReactJs Course For Beginners.pdf", title: "Complete ReactJS", desc: "Zero to Hero course for ReactJS library.", tag: "Web Dev" },
+            { file: "SCSE Incredible 8 .pdf", title: "SCSE Incredible 8", desc: "School of C.S.E 'Incredible 8' event recognition.", tag: "Award" },
+            { file: "Software Engineering Implementation and Testing.pdf", title: "Software Engineering", desc: "Implementation and Testing methodologies in Software Engineering.", tag: "Engineering" },
+            { file: "TCP & IP and Advanced Topics.pdf", title: "TCP/IP Advanced", desc: "Deep dive into TCP/IP protocols and advanced networking.", tag: "Networking" },
+            { file: "The Beginner's Guide to Bash Scripting and Automation.pdf", title: "Bash Scripting", desc: "Automation and scripting using Bash shell.", tag: "DevOps" },
+            { file: "The Complete C++ Programming Course from Basic to Expert.pdf", title: "C++ Expert", desc: "Comprehensive C++ programming from basic to expert level.", tag: "Programming" },
+            { file: "UI UX App Design With Figma.pdf", title: "UI/UX with Figma", desc: "Designing mobile app interfaces using Figma.", tag: "Design" },
+            { file: "WEB-E-STAN 4.pdf", title: "WEB-E-STAN 4.0", desc: "Web development competition 'Web-E-Stan' certificate.", tag: "Competition" },
+            { file: "Web Development Cursa.pdf", title: "Web Dev (Cursa)", desc: "Web Development certification from Cursa.", tag: "Web Dev" }
+        ];
+
+        const grid = document.getElementById('pdfGrid');
+        const searchInput = document.getElementById('searchInput');
+        const statsBar = document.getElementById('statsBar');
+        const filterContainer = document.getElementById('filterContainer');
+
+        let activeTag = 'All';
+
+        const brandMap = {
+            aws: { class: 'card-aws', icon: 'fab fa-aws' },
+            google: { class: 'card-google', icon: 'fab fa-google' },
+            gdg: { class: 'card-google', icon: 'fab fa-google' },
+            gdsc: { class: 'card-google', icon: 'fab fa-google' },
+            microsoft: { class: 'card-microsoft', icon: 'fab fa-microsoft' },
+            azure: { class: 'card-microsoft', icon: 'fab fa-microsoft' },
+            excel: { class: 'card-microsoft', icon: 'fas fa-file-excel' },
+            powerpoint: { class: 'card-microsoft', icon: 'fas fa-file-powerpoint' },
+            iit: { class: 'card-iit', icon: 'fas fa-university' },
+            university: { class: 'card-iit', icon: 'fas fa-university' },
+            cisco: { class: 'card-cisco', icon: 'fas fa-network-wired' },
+            hackathon: { class: 'card-hackathon', icon: 'fas fa-trophy' },
+            "solve-a-thon": { class: 'card-hackathon', icon: 'fas fa-trophy' },
+            coursera: { class: 'card-coursera', icon: 'fas fa-graduation-cap' },
+            udemy: { class: 'card-coursera', icon: 'fas fa-graduation-cap' },
+            cursa: { class: 'card-coursera', icon: 'fas fa-graduation-cap' },
+            nptel: { class: 'card-coursera', icon: 'fas fa-graduation-cap' },
+            freecodecamp: { class: 'card-coursera', icon: 'fab fa-free-code-camp' },
+            flutter: { class: 'card-google', icon: 'fas fa-mobile-alt' },
+            react: { class: 'card-google', icon: 'fab fa-react' },
+            nuxt: { class: 'card-google', icon: 'fab fa-vuejs' },
+            javascript: { class: 'card-google', icon: 'fab fa-js' },
+            js: { class: 'card-google', icon: 'fab fa-js' },
+            python: { class: 'card-google', icon: 'fab fa-python' },
+            "c++": { class: 'card-generic', icon: 'fas fa-laptop-code' },
+            "full stack": { class: 'card-google', icon: 'fas fa-code' },
+            web: { class: 'card-google', icon: 'fas fa-code' },
+            ai: { class: 'card-google', icon: 'fas fa-brain' },
+            machine: { class: 'card-google', icon: 'fas fa-brain' },
+            data: { class: 'card-generic', icon: 'fas fa-chart-line' },
+            design: { class: 'card-generic', icon: 'fas fa-paint-brush' },
+            figma: { class: 'card-generic', icon: 'fab fa-figma' },
+            graphics: { class: 'card-generic', icon: 'fas fa-palette' },
+            blockchain: { class: 'card-hackathon', icon: 'fas fa-cubes' },
+            crypto: { class: 'card-hackathon', icon: 'fas fa-coins' },
+            networking: { class: 'card-cisco', icon: 'fas fa-network-wired' },
+            network: { class: 'card-cisco', icon: 'fas fa-network-wired' },
+            tcp: { class: 'card-cisco', icon: 'fas fa-network-wired' },
+            packet: { class: 'card-cisco', icon: 'fas fa-network-wired' },
+            devops: { class: 'card-aws', icon: 'fas fa-terminal' },
+            git: { class: 'card-aws', icon: 'fab fa-git-alt' },
+            bash: { class: 'card-aws', icon: 'fas fa-terminal' },
+            scripting: { class: 'card-aws', icon: 'fas fa-terminal' },
+            award: { class: 'card-hackathon', icon: 'fas fa-award' },
+            appreciation: { class: 'card-hackathon', icon: 'fas fa-certificate' },
+            recognition: { class: 'card-hackathon', icon: 'fas fa-medal' },
+            "incredible 8": { class: 'card-hackathon', icon: 'fas fa-star' }
+        };
+
+        function getBrandData(title, filename) {
+            const lowerTitle = title.toLowerCase();
+            const lowerFile = filename.toLowerCase();
+            for (const key in brandMap) {
+                if (lowerTitle.includes(key) || lowerFile.includes(key)) {
+                    return brandMap[key];
+                }
+            }
+            return { class: 'card-generic', icon: 'fas fa-file-pdf' };
+        }
+
+        // Counter Animation
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Extract unique tags and set up stats
+        function updateStatsAndFilters() {
+            const tags = ['All', ...new Set(pdfDocuments.map(doc => doc.tag))];
+
+            // Render Filters
+            filterContainer.innerHTML = '';
+            tags.forEach(tag => {
+                const chip = document.createElement('div');
+                chip.className = `filter-chip ${activeTag === tag ? 'active' : ''}`;
+                chip.textContent = tag;
+                chip.onclick = () => {
+                    activeTag = tag;
+                    updateStatsAndFilters();
+                    renderCards(searchInput.value);
+                };
+                filterContainer.appendChild(chip);
+            });
+
+            // Render Stats with Animation
+            const totalDocs = pdfDocuments.length;
+            const topTag = pdfDocuments.reduce((acc, doc) => {
+                acc[doc.tag] = (acc[doc.tag] || 0) + 1;
+                return acc;
+            }, {});
+            const sortedTags = Object.entries(topTag).sort((a, b) => b[1] - a[1]);
+            const mostUsedTag = sortedTags.length > 0 ? sortedTags[0][0] : 'None';
+
+            statsBar.innerHTML = `
+                <div class="stat-item">
+                    <span class="stat-value" id="stat-total">0</span>
+                    <span class="stat-label">Total Assets</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="stat-cats">0</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" style="font-size: 1.1rem; line-height: 1.5; padding-top: 0.2rem;">${mostUsedTag}</span>
+                    <span class="stat-label">Major Focus</span>
+                </div>
+            `;
+
+            animateValue(document.getElementById('stat-total'), 0, totalDocs, 1000);
+            animateValue(document.getElementById('stat-cats'), 0, tags.length - 1, 1000);
+        }
+
+        function renderCards(filterText = '') {
+            grid.innerHTML = '';
+            let count = 0;
+
+            pdfDocuments.forEach((doc, index) => {
+                const matchesSearch = doc.title.toLowerCase().includes(filterText.toLowerCase()) ||
+                    doc.tag.toLowerCase().includes(filterText.toLowerCase()) ||
+                    doc.desc.toLowerCase().includes(filterText.toLowerCase());
+                const matchesTag = activeTag === 'All' || doc.tag === activeTag;
+
+                if (matchesSearch && matchesTag) {
+                    const brand = getBrandData(doc.title, doc.file);
+                    const card = document.createElement('a');
+                    card.href = encodeURI(doc.file);
+                    card.target = "_blank";
+                    card.className = `pdf-card ${brand.class} ${brand.class !== 'card-generic' ? 'branded' : ''}`;
+                    card.style.animationDelay = `${count * 0.05}s`;
+
+                    card.innerHTML = `
+                        <div class="card-content-wrapper" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div style="display:flex; justify-content:space-between; align-items:start;">
+                                    <i class="${brand.icon} card-icon"></i>
+                                    <span class="tag">${doc.tag}</span>
+                                </div>
+                                <div class="card-title">${doc.title}</div>
+                                <div class="card-desc">${doc.desc}</div>
+                            </div>
+                            <div class="card-meta">
+                                <span><i class="fas fa-external-link-alt" style="font-size: 0.7em; margin-right: 4px;"></i> View Document</span>
+                            </div>
+                        </div>
+                    `;
+
+                    grid.appendChild(card);
+                    count++;
+                }
+            });
+
+            if (count === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">No documents found ${activeTag !== 'All' ? `in "${activeTag}"` : ''} matching your search.</div>`;
+            }
+        }
+
+        // Initial Render
+        updateStatsAndFilters();
+        renderCards();
+
+        // Search Listener
+        searchInput.addEventListener('input', (e) => {
+            renderCards(e.target.value);
+        });
+
+        // Parallax and Particles Removed
+
+    </script>
+</body>
+
+</html>
