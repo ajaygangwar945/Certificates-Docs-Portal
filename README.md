@@ -76,6 +76,7 @@ The project consists of a high-end interface managing 73 professional documents:
 The portal is deployed and can be accessed at:
 
 <p align="center">
+
   [![Vercel Deployment](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://certificates-docs-portal.vercel.app/)
 </p>
 
