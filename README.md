@@ -55,7 +55,7 @@ The portal now features an advanced **Granular Brand Mapping** engine. It goes b
 
 ## 📂 Project Structure
 
-The project consists of a high-end interface managing **75+** professional documents:
+The project consists of a high-end interface managing **80+** professional documents:
 
 - `index.html`: The main portal (Single-file architecture).
 - `README.md`: Project documentation.
@@ -69,7 +69,7 @@ The project consists of a high-end interface managing **75+** professional docum
 | **Web Development** | Full Stack, React, Neo Colab, & Web3 Projects |
 | **Networking & Cloud** | AWS, Azure, TCP/IP, & Packet Switching |
 | **Hackathons** | Space Hackathons (Antariksh), Solve-A-Thons, & Buildfests |
-| **Academic** | IIT Ropar Competitions & University Honors |
+| **Academic** | IIT Ropar Advitiya '26, Competitions & University Honors |
 
 ## 🌐 Live Demo
 

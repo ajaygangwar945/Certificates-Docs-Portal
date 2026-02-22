@@ -832,7 +832,11 @@
             { file: "The Complete C++ Programming Course from Basic to Expert.pdf", title: "C++ Expert", desc: "Comprehensive C++ programming from basic to expert level.", tag: "Programming" },
             { file: "UI UX App Design With Figma.pdf", title: "UI/UX with Figma", desc: "Designing mobile app interfaces using Figma.", tag: "Design" },
             { file: "WEB-E-STAN 4.pdf", title: "WEB-E-STAN 4.0", desc: "Web development competition 'Web-E-Stan' certificate.", tag: "Competition" },
-            { file: "Web Development Cursa.pdf", title: "Web Dev (Cursa)", desc: "Web Development certification from Cursa.", tag: "Web Dev" }
+            { file: "Web Development Cursa.pdf", title: "Web Dev (Cursa)", desc: "Web Development certification from Cursa.", tag: "Web Dev" },
+            { file: "Gen Ai Nasscom.pdf", title: "GenAI Masterclass", desc: "Generative AI masterclass certification by Nasscom.", tag: "AI/ML" },
+            { file: "IIT ROPAR AI Fusion Advitiya'26.pdf", title: "IIT Ropar: AI Fusion '26", desc: "AI Fusion challenge at Advitiya '26, IIT Ropar.", tag: "Academic" },
+            { file: "IIT ROPAR AImagination Advitiya'26.pdf", title: "IIT Ropar: AImagination '26", desc: "AImagination event at Advitiya '26, IIT Ropar.", tag: "Academic" },
+            { file: "IIT ROPAR CodeHunt Advitiya'26.pdf", title: "IIT Ropar: CodeHunt '26", desc: "CodeHunt programming contest at Advitiya '26, IIT Ropar.", tag: "Academic" }
         ];
 
         const grid = document.getElementById('pdfGrid');
@@ -939,7 +943,9 @@
             award: { class: 'card-hackathon', icon: 'fas fa-award', color: '#fbbf24' },
             appreciation: { class: 'card-hackathon', icon: 'fas fa-certificate', color: '#fbbf24' },
             recognition: { class: 'card-hackathon', icon: 'fas fa-medal', color: '#fbbf24' },
-            "incredible 8": { class: 'card-hackathon', icon: 'fas fa-bolt', color: '#fbbf24' }
+            "incredible 8": { class: 'card-hackathon', icon: 'fas fa-bolt', color: '#fbbf24' },
+            nasscom: { class: 'card-generic', icon: 'fas fa-graduation-cap', color: '#0056d2' },
+            advitiya: { class: 'card-iit', icon: 'fas fa-fire-flame-curved', color: '#ef4444' }
         };
 
         function getBrandData(title, filename) {
