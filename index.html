@@ -1034,6 +1034,7 @@
                     const card = document.createElement('a');
                     card.href = encodeURI(doc.file);
                     card.target = "_blank";
+                    card.rel = "noopener noreferrer";
                     card.className = `pdf-card ${brand.class} ${brand.class !== 'card-generic' ? 'branded' : ''}`;
                     card.style.animationDelay = `${count * 0.05}s`;
 
