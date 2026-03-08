@@ -18,6 +18,9 @@
             /* Indigo 400 */
             --secondary-color: #c084fc;
             /* Purple 400 */
+            --blob-color-3: #f472b6;
+            --blob-color-4: #38bdf8;
+            --blob-opacity: 0.6;
             --bg-color: #0f172a;
             /* Slate 900 */
             --text-color: #f1f5f9;
@@ -37,6 +40,9 @@
         [data-theme="light"] {
             --primary-color: #4f46e5;
             --secondary-color: #9333ea;
+            --blob-color-3: #db2777;
+            --blob-color-4: #0284c7;
+            --blob-opacity: 0.3;
             --bg-color: #f1f5f9;
             --text-color: #0f172a;
             --text-muted: #334155;
@@ -90,92 +96,64 @@
             filter: url(#noiseFilter);
         }
 
-        .blobs-container {
+        .shape {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            filter: url('#goo');
-        }
-
-        .blob {
-            position: absolute;
-            filter: blur(60px);
-            opacity: var(--blob-opacity);
-            animation: float 20s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
+            filter: blur(90px);
             border-radius: 50%;
-            transition: opacity 0.5s ease;
+            animation: moveShape 25s infinite alternate ease-in-out;
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
         }
 
-        /* Particle Canvas Removed */
-
-        .blob-1 {
-            top: -15%;
-            left: -10%;
-            width: 60vw;
-            height: 60vw;
+        .shape-1 {
+            width: 50vw;
+            height: 50vw;
             background: var(--primary-color);
-            animation-delay: 0s;
+            top: -10vh;
+            left: -10vw;
         }
 
-        .blob-2 {
-            bottom: -15%;
-            right: -10%;
+        .shape-2 {
             width: 60vw;
             height: 60vw;
             background: var(--secondary-color);
-            animation-delay: -4s;
-            animation-direction: alternate-reverse;
+            bottom: -20vh;
+            right: -10vw;
+            animation-delay: -5s;
+            animation-duration: 30s;
         }
 
-        .blob-3 {
-            top: 20%;
-            right: 10%;
+        .shape-3 {
             width: 45vw;
             height: 45vw;
-            background: var(--blob-color-3);
-            animation-duration: 25s;
-            animation-delay: -8s;
+            background: #f472b6;
+            top: 30vh;
+            left: 40vw;
+            animation-delay: -10s;
+            opacity: 0.35;
+            animation-duration: 20s;
         }
 
-        .blob-4 {
-            bottom: 20%;
-            left: 10%;
-            width: 40vw;
-            height: 40vw;
-            background: var(--blob-color-4);
-            animation-duration: 30s;
-            animation-delay: -12s;
-            animation-direction: alternate-reverse;
+        [data-theme="light"] .shape {
+            opacity: 0.3;
         }
 
-        .blob-5 {
-            top: 50%;
-            left: 50%;
-            width: 35vw;
-            height: 35vw;
-            background: var(--secondary-color);
-            opacity: calc(var(--blob-opacity) * 0.7);
-            animation-duration: 15s;
-            animation-delay: -5s;
+        [data-theme="light"] .shape-3 {
+            opacity: 0.2;
         }
 
-        @keyframes float {
+        @keyframes moveShape {
             0% {
-                transform: translate(0, 0) scale(1) rotate(0deg);
+                transform: translate(0, 0) scale(1);
             }
 
-            33% {
-                transform: translate(30px, -50px) scale(1.1) rotate(10deg);
-            }
-
-            66% {
-                transform: translate(-20px, 20px) scale(0.9) rotate(-5deg);
+            50% {
+                transform: translate(5vw, 10vh) scale(1.1);
             }
 
             100% {
-                transform: translate(0, 0) scale(1) rotate(0deg);
+                transform: translate(-5vw, -5vh) scale(0.9);
             }
         }
 
@@ -676,9 +654,11 @@
 <body>
 
     <div class="noise"></div>
-    <div class="background"></div>
-
-    <!-- SVG Filters Removed -->
+    <div class="background">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
 
     <div class="container">
         <header>
