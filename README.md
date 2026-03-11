@@ -71,6 +71,8 @@ The project consists of a high-end interface managing **80+** professional docum
 | **Hackathons** | Space Hackathons (Antariksh), Solve-A-Thons, & Buildfests |
 | **Academic** | IIT Ropar Advitiya '26, Competitions & University Honors |
 
+---
+
 ## 🌐 Live Demo
 
 The portal is deployed and can be accessed at:
