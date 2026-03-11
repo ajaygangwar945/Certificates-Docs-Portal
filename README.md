@@ -43,23 +43,26 @@ The portal now features an advanced **Granular Brand Mapping** engine. It goes b
 
 ---
 
-## 🛠️ Technical Stack
+## 🛠️ Technical Stack & Architecture
 
-- **Core**: Semantic HTML5 & Modern CSS3
-- **Logic**: Vanilla JavaScript with Advanced Regex Matching
-- **Icons**: FontAwesome 6.4 & Custom Branded SVGs
-- **Typography**: Google Fonts (Outfit)
-- **Design**: Modern Glassmorphism & Hardware-Accelerated Rendering
+- **Core Markup**: Semantic **HTML5** acting as the structural skeleton and metadata host.
+- **Styling**: Modern **CSS3** utilizing custom properties (variables) for instant Dark/Light mode theme switching, Flexbox/Grid for responsive layouts, Glassmorphism (`backdrop-filter`) for premium visual depth, and `@keyframes` for continuous background animations.
+- **Dynamic Logic**: Powerful **Vanilla JavaScript (ES6+)** handling the local storage API for theme persistence, advanced Data Structures (Arrays & Objects) housing certificate metadata, DOM Manipulation for client-side rendering, and efficient real-time search filtering.
+- **Static Single-File Architecture**: Optimized for lightning-fast loading speeds on static hosts (like Vercel) with no backend requirements.
+- **Typography**: **Google Fonts** (Outfit) for a modern, highly readable interface.
+- **Icons**: **FontAwesome 6.4** providing scalable, branded vector graphics.
 
 ---
 
 ## 📂 Project Structure
 
-The project consists of a high-end interface managing **80+** professional documents:
+The repository is built around a single-page architecture supporting a local database of **80+** professional certificates:
 
-- `index.html`: The main portal (Single-file architecture).
-- `README.md`: Project documentation.
-- `...pdfs`: Professional certificates and achievements.
+- `index.html`: The primary portal file containing HTML structure, embedded CSS styling, and Vanilla JS application logic.
+- `project_analysis_report.txt`: In-depth developer documentation detailing the implementation of all deployed technologies.
+- `README.md`: High-level project overview and feature documentation.
+- `banner.png`: Primary marketing asset for documentation and sharing.
+- `.../*.pdf`: The underlying dataset of over 80 professional certificates, course completions, and hackathon recognitions.
 
 ### Featured Tracks
 
