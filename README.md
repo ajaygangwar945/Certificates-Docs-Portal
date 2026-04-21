@@ -56,13 +56,15 @@ The portal now features an advanced **Granular Brand Mapping** engine. It goes b
 
 ## 📂 Project Structure
 
-The repository is built around a single-page architecture supporting a local database of **80+** professional certificates:
+The repository is built around a modern decoupled architecture supporting a local database of **90** professional certificates:
 
-- `index.html`: The primary portal file containing HTML structure, embedded CSS styling, and Vanilla JS application logic.
-- `project_analysis_report.txt`: In-depth developer documentation detailing the implementation of all deployed technologies.
+- `index.html`: The structural skeleton of the portal.
+- `style.css`: Modern styling including dark mode, glassmorphism, and animations.
+- `script.js`: Core logic for data handling, filtering, search, and UI interactivity.
+- `project_analysis_report.txt`: In-depth developer documentation detailing the implementation.
 - `README.md`: High-level project overview and feature documentation.
 - `banner.png`: Primary marketing asset for documentation and sharing.
-- `.../*.pdf`: The underlying dataset of over 80 professional certificates, course completions, and hackathon recognitions.
+- `.../*.pdf`: The underlying dataset of **90** professional certificates, course completions, and hackathon recognitions.
 
 ### Featured Tracks
 
