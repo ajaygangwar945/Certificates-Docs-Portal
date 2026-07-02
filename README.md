@@ -63,6 +63,7 @@ The repository is built around a modern decoupled architecture supporting a loca
 - `script.js`: Core logic for data handling, filtering, search, and UI interactivity.
 - `project_analysis_report.txt`: In-depth developer documentation detailing the implementation.
 - `README.md`: High-level project overview and feature documentation.
+- `favicon.svg`: Scalable vector icon for browser tabs and web bookmarks.
 - `banner.png`: Primary marketing asset for documentation and sharing.
 - `.../*.pdf`: The underlying dataset of **90** professional certificates, course completions, and hackathon recognitions.
 
